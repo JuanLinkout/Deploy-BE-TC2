@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Uma rota, aceitando conexões na raiz e retornando um json simples
 app.get("/", (req, res) => {
-  res.json({ msg: "Está funcionando!" });
+  res.json({ aluno: { codigo: "SC3012336", nome: "Juan Lucas Rossi" }, msg: "Está funcionando!" });
 });
 
 const db = require("./app/models");

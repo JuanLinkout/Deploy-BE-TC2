@@ -1,10 +1,10 @@
 const db = require("../models");
-const Produto = db.produto;
+const User = db.user;
 
-// Adicionar um novo produto
+// Adicionar um novo user
 exports.create = (req, res) => {
-    // Verifica se existem as informações necessárias para adicionar um produto
-    if (!req.body.titulo || !req.body.descricao || !req.body.preco) {
+    // Verifica se existem as informações necessárias para adicionar um user
+    if (!req.body.nome || !req.body.idade || !req.body.foto) {
         // Se não existir, retorna uma mensagem de erro.
         res.status(400).send({ msg: "Requisição incompleta: dados ausentes" });
         // Encerra a função.
@@ -12,15 +12,15 @@ exports.create = (req, res) => {
     }
 
     // Caso a requisição possua todos as informações necessárias, é hora de criar o objeto...
-    const produto = new Produto({
-        titulo: req.body.titulo,
-        descricao: req.body.descricao,
-        preco: req.body.preco
+    const user = new User({
+        nome: req.body.nome,
+        idade: req.body.idade,
+        foto: req.body.foto
     });
 
     // Depois de criado o objeto, vamos salvá-lo no banco de dados.
-    produto.save(produto).then(data => {
-        // Caso o dado seja armazenado com sucesso, retorna o registro do MongoDB (o produto recém cadastrado).
+    user.save(user).then(data => {
+        // Caso o dado seja armazenado com sucesso, retorna o registro do MongoDB (o user recém cadastrado).
         res.send(data)
     }).catch(err => {
         // Caso haja algum problema, identifica um erro 500 e uma mensagem de erro qualquer
@@ -39,25 +39,25 @@ exports.findAll = (req, res) => {
     */
     var condition = {};
 
-    Produto.find(condition).then(data => {
+    User.find(condition).then(data => {
         res.send(data);
     }).catch(err => {
         res.status(500).send({ msg: "Erro ao obter lista de produtos" })
     });
 };
 
-// Retornar um produto específico
+// Retornar um user específico
 exports.findOne = (req, res) => {
     /* 
-    Ao contrario de informações enviados pelo serviço, o "id" de cada produto
+    Ao contrario de informações enviados pelo serviço, o "id" de cada user
     é tratado automaticamente pelo Mongo/Mongoose. Por isso, não se usa req.body
     mas sim req.params 
     */
     const id = req.params.id;
 
-    Produto.findById(id).then(data => {
+    User.findById(id).then(data => {
         if (!data) {
-            res.status(404).send({ msg: "Produto não encontrado" });
+            res.status(404).send({ msg: "User não encontrado" });
         } else {
             res.send(data);
         }
@@ -66,7 +66,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Remover um produto
+// Remover um user
 exports.update = (req, res) => {
     if (!req.body) {
         res.status(400).send({ msg: "Dados inválidos" });
@@ -75,45 +75,45 @@ exports.update = (req, res) => {
 
     const id = req.params.id;
 
-    Produto.findByIdAndUpdate(id, req.body).then(data => {
+    User.findByIdAndUpdate(id, req.body).then(data => {
         if (!data) {
-            res.status(400).send({ msg: "Não foi possível atualizar o Produto" })
+            res.status(400).send({ msg: "Não foi possível atualizar o User" })
         } else {
-            res.send({ msg: "Produto atualizado com sucesso" });
+            res.send({ msg: "User atualizado com sucesso" });
         }
     }).catch(err => {
-        res.status(500).send({ msg: "Erro ao atualizar o Produto" });
+        res.status(500).send({ msg: "Erro ao atualizar o User" });
     });
 
 };
 
-// Remover um produto específico
+// Remover um user específico
 exports.delete = (req, res) => {
     const id = req.params.id;
-    Produto.findByIdAndRemove(id).then(data => {
+    User.findByIdAndRemove(id).then(data => {
         if (!data) {
-            res.status(400).send({ msg: "Não foi possível remover o Produto" })
+            res.status(400).send({ msg: "Não foi possível remover o User" })
         } else {
-            res.send({ msg: "Produto deletado com sucesso" });
+            res.send({ msg: "User deletado com sucesso" });
         }
     }).catch(err => {
-        res.status(500).send({ msg: "Erro ao deletar o Produto" });
+        res.status(500).send({ msg: "Erro ao deletar o User" });
     });
 };
 
 // Remover todos os produtos com preço menor que 5 reais 
 exports.deleteCheap = (req, res) => {
     // $lt -> less than, menor que...
-    var condition = { preco: { $lt: 5.0 } };
+    var condition = { foto: { $lt: 5.0 } };
 
-    Produto.deleteMany(condition).then(data => {
+    User.deleteMany(condition).then(data => {
         if (data.deletedCount == 0) {
-            res.send({ msg: "Nenhum produto foi deletado" });
+            res.send({ msg: "Nenhum user foi deletado" });
         } else {
             res.send({ msg: "Foram deletados " + data.deletedCount + " produtos" });
         }
 
     }).catch(err => {
-        res.status(500).send({ msg: "Erro ao atualizar o Produto" });
+        res.status(500).send({ msg: "Erro ao atualizar o User" });
     });
 };

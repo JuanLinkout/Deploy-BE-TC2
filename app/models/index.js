@@ -4,5 +4,5 @@ mongoose.Promise = global.Promise;
 const db = {};
 db.mongoose = mongoose;
 db.url = dbConfig.url;
-db.produto = require("./produto.model.js")(mongoose);
+db.user = require("./user.model.js")(mongoose);
 module.exports = db;
